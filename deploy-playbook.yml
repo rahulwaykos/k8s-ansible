@@ -1,0 +1,19 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Deploy wordpress and service
+      k8s:
+        state: present
+        src: /root/ansible/k8s/mysql.yml
+      register: svc
+    - name: Deploy Mysql and service
+      k8s: 
+        state: present
+        src: /root/ansible/k8s/wordpress.yml
+    - name: Getting Services and Deployments
+      shell: |
+        kubectl get svc 
+        kubectl get deployment
+      register: info
+    - debug: var=info
